@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mapper.TradeMapper" >
+	 <select id="getAll" resultType="java.util.HashMap" parameterType="java.util.HashMap" >
+		SELECT * FROM OAP_API_TRADE_201811 where id='afdd1fc8-66f71de6-0166-f773d0ed-5974'    
+	</select>	
+	
+	<select id="getApikeyAllInfo" parameterType="java.util.Map" resultType="java.util.HashMap">
+		select o.user_id,
+		       o.api_id,
+		       p.oap_user_key,
+		       p.oap_sigup_ip,
+		       to_char(o.qt_total) as qt_total,
+		       to_char(o.qt_free) as qt_free,
+		       to_char(o.qt_used) as qt_used,
+		       to_char(o.IS_LIMIT) as IS_LIMIT,	    
+		       to_char(o.LIMIT_SECOND) as LIMIT_SECOND,	
+		       o.create_time,
+		       o.is_active
+		  from oap_user_api o
+		 inner join oap_api_interface f
+		    on o.api_id = f.api_id inner join pro_basic_user p
+		    on o.user_id=p.user_id  
+		 where o.is_active = '1'
+		   and f.is_active = '1'
+	</select>
+	
+	<insert id="insertApiTrade"  parameterType="java.util.HashMap" >
+		insert into oap_api_trade_${TABLE_DATE}
+		  (user_id,
+		   api_id,
+		   start_time,
+		   is_success,
+		   request_params,
+		   request_type,
+		   response_data_type,
+		   api_key,
+		   request_ip,
+		   end_time,
+		   id,
+		   query_no,
+		   query_name,
+		   RESPONSE_NAME,
+		   RESPONSE_NO,
+		   fromquery)
+		values
+		  (#{USER_ID},
+		   #{API_ID},
+		   #{START_TIME},
+		   #{IS_SUCCESS},
+		   #{REQUEST_PARAMS},
+		   #{REQUEST_TYPE},
+		   #{RESPONSE_DATA_TYPE},
+		   #{API_KEY},
+		   #{REQUEST_IP},
+		   #{END_TIME},
+		   #{ID},
+		   #{QUERY_NO},
+		   #{QUERY_NAME},
+		   #{RESPONSE_NAME},
+		   #{RESPONSE_NO},
+		   #{FROMQUERY})   
+	</insert>		
+</mapper>
